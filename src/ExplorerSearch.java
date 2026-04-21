@@ -29,11 +29,26 @@ public class ExplorerSearch {
      * @return the number of spaces the explorer can reach
      */
     public static int reachableArea(int[][] island) {
-
-        // Implement your method here!
-        // Please also make more test cases
-        // I STRONGLY RECOMMEND testing some helpers you might make too
+        int[] startLocation = reachableAreaLocation(island);
+        int[][] visited = new int[island.length][island[0].length];
         return -1;
+    }
+
+    private static int canReach(int[] currentLoc, int[][] island, boolean[][] visited) {
+
+        int curR = currentLoc[0];
+        int curC = currentLoc[1];
+        if (visited[curR][curC])
+            return 0;
+        visited[curR][curC] = true;
+        int area = 1;
+
+        for (int[] move : possibleMoves(island, currentLoc)) {
+            area += canReach(move, island, visited);
+
+        }
+        return area;
+
     }
 
     public static List<int[]> possibleMoves(int[][] island, int[] location) {
@@ -55,13 +70,13 @@ public class ExplorerSearch {
         if (newR < island.length && island[newR][newC] != 2) {
             validLocs.add(new int[] { newR, newC });
         }
-        // left
+        // right
         newR = curR;
         newC = curC + 1;
         if (newC < island[0].length && island[newR][newC] != 2) {
             validLocs.add(new int[] { newR, newC });
         }
-        // right
+        // left
         newR = curR;
         newC = curC - 1;
 

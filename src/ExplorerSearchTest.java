@@ -44,19 +44,27 @@ public class ExplorerSearchTest {
         assertTrue(moveSet.contains("1,"));
     }
 
-    private Set<String> toSet(List<int[]> list) {
-        Set<String> set = new HashSet<>();
-        for (int[] arr : list) {
-            set.add(arr[0] + "," + arr[1]);
-        }
-        return set;
-    }
-
     @Test
     public void testPossibleMoves_blockedRightByTwo() {
         int[][] island = {
                 { 1, 1, 1 },
                 { 1, 3, 2 },
+                { 1, 1, 1 }
+        };
+        int[] location = { 1, 1 };
+        Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
+        assertTrue(movSet.contains("0,1")); // up open
+        assertTrue(movSet.contains("2,1")); // down open
+        assertTrue(movSet.contains("1,0")); // left open
+        assertFalse(movSet.contains("1,2")); // right blocked
+
+    }
+
+    @Test
+    public void testPossibleMoves_allDirectionsOpen() {
+        int[][] island = {
+                { 1, 1, 1 },
+                { 1, 3, 1 },
                 { 1, 1, 1 }
         };
         int[] location = { 1, 1 };
@@ -96,6 +104,30 @@ public class ExplorerSearchTest {
         assertTrue(movSet.contains("1,0")); // left open
         assertFalse(movSet.contains("1,2")); // right blocked
 
+    }
+
+    @Test
+    public void testPossibleMoves_blockedAboveByTwo() {
+        int[][] island = {
+                { 1, 2, 1 },
+                { 1, 3, 3 },
+                { 1, 3, 1 }
+        };
+        int[] location = { 1, 1 };
+        Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
+        assertTrue(movSet.contains("0,1")); // up open
+        assertTrue(movSet.contains("2,1")); // down open
+        assertTrue(movSet.contains("1,0")); // left open
+        assertFalse(movSet.contains("1,2")); // right blocked
+
+    }
+
+    private Set<String> toSet(List<int[]> list) {
+        Set<String> set = new HashSet<>();
+        for (int[] arr : list) {
+            set.add(arr[0] + "," + arr[1]);
+        }
+        return set;
     }
 
     // Add more tests here!
