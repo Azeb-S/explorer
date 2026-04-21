@@ -35,6 +35,18 @@ public class ExplorerSearchTest {
     }
 
     @Test
+    public void testReachableArea_centerOdGride() {
+        int[][] island = {
+                { 1, 1, 1 },
+                { 1, 0, 1 },
+                { 1, 1, 1 }
+        };
+
+        int[] expected = { 1, 1 };
+        assertArrayEquals(expected, ExplorerSearch.reachableAreaLocation(island));
+    }
+
+    @Test
     public void testPossibleMoves_allDirectionBlockedByTwo() {
         int[][] island = {
                 { 2, 2, 2 },
