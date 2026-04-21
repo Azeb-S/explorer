@@ -59,6 +59,20 @@ public class ExplorerSearchTest {
     }
 
     @Test
+    public void testReachableArea_notFoundThrowException() {
+        int[][] island = {
+                { 1, 1, 1 },
+                { 1, 1, 1 },
+                { 1, 1, 1 }
+        };
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            ExplorerSearch.reachableAreaLocation(island);
+        });
+        assertEquals("starting location not found", exception.getMessage());
+    }
+
+    @Test
     public void testPossibleMoves_allDirectionBlockedByTwo() {
         int[][] island = {
                 { 2, 2, 2 },
