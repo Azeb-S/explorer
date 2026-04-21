@@ -29,9 +29,61 @@ public class ExplorerSearch {
      * @return the number of spaces the explorer can reach
      */
     public static int reachableArea(int[][] island) {
+
         // Implement your method here!
         // Please also make more test cases
         // I STRONGLY RECOMMEND testing some helpers you might make too
         return -1;
     }
+
+    public static List<int[]> possibleMoves(int[][] island, int[] location) {
+        int curR = location[0];
+        int curC = location[1];
+
+        List<int[]> validLocs = new ArrayList<>();
+
+        // up
+        int newR = curR - 1;
+        int newC = curC;
+        if (island[newR][newC] != 2) {
+            validLocs.add(new int[] { newR, newC });
+
+        }
+        // down
+        newR = curR + 1;
+        newC = curC;
+        if (newR < island.length && island[newR][newC] != 2) {
+            validLocs.add(new int[] { newR, newC });
+        }
+        // left
+        newR = curR;
+        newC = curC + 1;
+        if (newC < island[0].length && island[newR][newC] != 2) {
+            validLocs.add(new int[] { newR, newC });
+        }
+        // right
+        newR = curR;
+        newC = curC - 1;
+
+        if (newC >= 0 && island[newR][newC] != 2) {
+            validLocs.add(new int[] { newR, newC });
+        }
+
+        return validLocs;
+
+    }
+
+    public static int[] reachableAreaLocation(int[][] island) {
+        for (int row = 0; row < island.length; row++) {
+            for (int col = 0; col < island[0].length; col++) {
+                if (island[row][col] == 1 || island[row][col] == 3) {
+                    return new int[] { row, col };
+                }
+            }
+        }
+
+        throw new IllegalArgumentException("land area to explor not found");
+
+    }
+
 }
