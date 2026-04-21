@@ -68,6 +68,36 @@ public class ExplorerSearchTest {
 
     }
 
+    @Test
+    public void testPossibleMoves_oneOpen_two_oneEdge() {
+        int[][] island = {
+                { 2, 2, 2 },
+                { 1, 3, 1 },
+                { 2, 2, 2 }
+        };
+        int[] location = { 1, 1 };
+        Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
+        assertTrue(movSet.contains("1,2"));
+        assertTrue(movSet.contains("1,0"));
+
+    }
+
+    @Test
+    public void testPossibleMoves_blockedbelowByTwo() {
+        int[][] island = {
+                { 1, 1, 1 },
+                { 1, 3, 3 },
+                { 1, 2, 1 }
+        };
+        int[] location = { 1, 1 };
+        Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
+        assertTrue(movSet.contains("0,1")); // up open
+        assertTrue(movSet.contains("2,1")); // down open
+        assertTrue(movSet.contains("1,0")); // left open
+        assertFalse(movSet.contains("1,2")); // right blocked
+
+    }
+
     // Add more tests here!
     // Come up with varied cases
 }
