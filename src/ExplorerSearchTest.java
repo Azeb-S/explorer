@@ -1,6 +1,7 @@
 import static org.junit.Assert.*;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -29,6 +30,42 @@ public class ExplorerSearchTest {
         int[] location = { 1, 1 };
         List<int[]> moves = ExplorerSearch.possibleMoves(island, location);
         assertTrue(moves.isEmpty());
+    }
+
+    @Test
+    public void testPossibleMoves_partialEdge() {
+        int[][] island = {
+                { 1, 3, 3 }
+        };
+        int[] location = { 0, 2 };
+        List<int[]> moves = ExplorerSearch.possibleMoves(island, location);
+        Set<String> moveSet = toSet(moves);
+        assertEquals(1, moves.size());
+        assertTrue(moveSet.contains("1,"));
+    }
+
+    private Set<String> toSet(List<int[]> list) {
+        Set<String> set = new HashSet<>();
+        for (int[] arr : list) {
+            set.add(arr[0] + "," + arr[1]);
+        }
+        return set;
+    }
+
+    @Test
+    public void testPossibleMoves_blockedRightByTwo() {
+        int[][] island = {
+                { 1, 1, 1 },
+                { 1, 3, 2 },
+                { 1, 1, 1 }
+        };
+        int[] location = { 1, 1 };
+        Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
+        assertTrue(movSet.contains("0,1")); // up open
+        assertTrue(movSet.contains("2,1")); // down open
+        assertTrue(movSet.contains("1,0")); // left open
+        assertFalse(movSet.contains("1,2")); // right blocked
+
     }
 
     // Add more tests here!
