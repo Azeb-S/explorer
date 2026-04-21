@@ -30,25 +30,46 @@ public class ExplorerSearch {
      */
     public static int reachableArea(int[][] island) {
         int[] startLocation = reachableAreaLocation(island);
-        int[][] visited = new int[island.length][island[0].length];
-        return -1;
+        boolean[][] visited = new boolean[island.length][island[0].length];
+        return countReachable(startLocation, island, visited);
     }
 
-    private static int canReach(int[] currentLoc, int[][] island, boolean[][] visited) {
-
+    private static int countReachable(int[] currentLoc, int[][] island, boolean[][] visited) {
         int curR = currentLoc[0];
         int curC = currentLoc[1];
-        if (visited[curR][curC])
+
+        if (visited[curR][curC]) {
             return 0;
+        }
+
         visited[curR][curC] = true;
+
         int area = 1;
 
         for (int[] move : possibleMoves(island, currentLoc)) {
-            area += canReach(move, island, visited);
-
+            area += countReachable(move, island, visited);
         }
-        return area;
 
+        return area;
+    }
+
+    private static boolean canReach(int[] currentLoc, int[][] island, boolean[][] visited) {
+        int curR = currentLoc[0];
+        int curC = currentLoc[1];
+
+        if (visited[curR][curC]) {
+            return false;
+        }
+
+        visited[curR][curC] = true;
+
+        for (int[] move : possibleMoves(island, currentLoc)) {
+            if (canReach(move, island, visited)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static List<int[]> possibleMoves(int[][] island, int[] location) {
@@ -60,27 +81,27 @@ public class ExplorerSearch {
         // up
         int newR = curR - 1;
         int newC = curC;
-        if (island[newR][newC] != 2) {
+        if (newR >= 0 && island[newR][newC] != 2 && island[newR][newC] != 3) {
             validLocs.add(new int[] { newR, newC });
-
         }
         // down
         newR = curR + 1;
         newC = curC;
-        if (newR < island.length && island[newR][newC] != 2) {
+        if (newR < island.length && island[newR][newC] != 2 && island[newR][newC] != 3) {
             validLocs.add(new int[] { newR, newC });
         }
         // right
         newR = curR;
         newC = curC + 1;
-        if (newC < island[0].length && island[newR][newC] != 2) {
+        if (newC < island[0].length && island[newR][newC] != 2 && island[newR][newC] != 3) {
             validLocs.add(new int[] { newR, newC });
         }
+
         // left
         newR = curR;
         newC = curC - 1;
 
-        if (newC >= 0 && island[newR][newC] != 2) {
+        if (newC >= 0 && island[newR][newC] != 2 && island[newR][newC] != 3) {
             validLocs.add(new int[] { newR, newC });
         }
 
@@ -91,13 +112,16 @@ public class ExplorerSearch {
     public static int[] reachableAreaLocation(int[][] island) {
         for (int row = 0; row < island.length; row++) {
             for (int col = 0; col < island[0].length; col++) {
-                if (island[row][col] == 1 || island[row][col] == 3) {
+                // if (island[row][col] == 1 || island[row][col] == 3) {
+                // return new int[] { row, col };
+                // }
+                if (island[row][col] == 0) {
                     return new int[] { row, col };
                 }
             }
         }
 
-        throw new IllegalArgumentException("land area to explor not found");
+        throw new IllegalArgumentException("starting location not found");
 
     }
 

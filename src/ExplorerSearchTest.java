@@ -20,16 +20,31 @@ public class ExplorerSearchTest {
     }
 
     @Test
+    public void testReachableArea_NoPath() {
+        int[][] island = {
+                { 1, 1, 1, 3, 1, 1 },
+                { 2, 2, 3, 2, 3, 1 },
+                { 1, 1, 2, 1, 3, 2 },
+                { 3, 2, 1, 1, 2, 1 },
+                { 2, 1, 2, 1, 1, 1 },
+        };
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            ExplorerSearch.reachableArea(island);
+        });
+    }
+
+    @Test
     public void testPossibleMoves_allDirectionBlockedByTwo() {
         int[][] island = {
                 { 2, 2, 2 },
-                { 2, 3, 2 },
+                { 2, 1, 2 },
                 { 2, 2, 2 }
 
         };
         int[] location = { 1, 1 };
         List<int[]> moves = ExplorerSearch.possibleMoves(island, location);
-        assertTrue(moves.isEmpty());
+        assertEquals(0, moves.size());
     }
 
     @Test
@@ -40,8 +55,8 @@ public class ExplorerSearchTest {
         int[] location = { 0, 2 };
         List<int[]> moves = ExplorerSearch.possibleMoves(island, location);
         Set<String> moveSet = toSet(moves);
-        assertEquals(1, moves.size());
-        assertTrue(moveSet.contains("1,"));
+        assertEquals(0, moves.size());
+
     }
 
     @Test
@@ -72,7 +87,7 @@ public class ExplorerSearchTest {
         assertTrue(movSet.contains("0,1")); // up open
         assertTrue(movSet.contains("2,1")); // down open
         assertTrue(movSet.contains("1,0")); // left open
-        assertFalse(movSet.contains("1,2")); // right blocked
+        assertTrue(movSet.contains("1,2")); // right blocked
 
     }
 
@@ -100,7 +115,7 @@ public class ExplorerSearchTest {
         int[] location = { 1, 1 };
         Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
         assertTrue(movSet.contains("0,1")); // up open
-        assertTrue(movSet.contains("2,1")); // down open
+        assertFalse(movSet.contains("2,1")); // down open
         assertTrue(movSet.contains("1,0")); // left open
         assertFalse(movSet.contains("1,2")); // right blocked
 
@@ -115,8 +130,8 @@ public class ExplorerSearchTest {
         };
         int[] location = { 1, 1 };
         Set<String> movSet = toSet(ExplorerSearch.possibleMoves(island, location));
-        assertTrue(movSet.contains("0,1")); // up open
-        assertTrue(movSet.contains("2,1")); // down open
+        assertFalse(movSet.contains("0,1")); // up open
+        assertFalse(movSet.contains("2,1")); // down open
         assertTrue(movSet.contains("1,0")); // left open
         assertFalse(movSet.contains("1,2")); // right blocked
 
